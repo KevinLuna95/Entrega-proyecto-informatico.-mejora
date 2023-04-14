@@ -1,9 +1,10 @@
 package es.ifp.programacion.ejercicio.uf5;
 
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.List;
 /**
- * Permite crear un proyecto y manejar diferentes clientes y jefes de proyecto mediante la escritura y lectura en ficheros .txt
+ * Permite crear un proyecto y manejar diferentes clientes y jefes de proyecto.
+ * He seleccionado una List ya que no es necesaria una estructura bidimensional. 
  * @author Kevin Luna botey
  *
  */
@@ -12,8 +13,8 @@ public class Proyecto {
 	private String nombre;
 	private String descripcion;
 	private Date fechaInicio;
-	private LinkedList<Cliente> clientes;
-	private LinkedList<JefeProyecto> jefes;
+	private List<Cliente> clientes;
+	private List<JefeProyecto> jefes;
 	
 	/**
 	 * Constructor de la clase proyecto
@@ -25,7 +26,7 @@ public class Proyecto {
 	 * @param jefes Indica el LinfedList de los clientes
 	 */
 	public Proyecto(String idProyecto, String nombre, String descripcion, Date fechaInicio,
-			LinkedList<Cliente> clientes, LinkedList<JefeProyecto> jefes) {
+			List<Cliente> clientes, List<JefeProyecto> jefes) {
 		this.idProyecto = idProyecto;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
@@ -100,32 +101,32 @@ public class Proyecto {
 	}
 	
 	/**
-	 * una clase que retorna un LinkedList con los clientes que contenga el proyecto
-	 * @return el LinkedList de clientes
+	 * una clase que retorna un List con los clientes que contenga el proyecto
+	 * @return el List de clientes
 	 */
-	public LinkedList<Cliente> getClientes(){
+	public List<Cliente> getClientes(){
 		return this.clientes;
 	}
 	
 	/**
 	 * @param clientes the clientes to set
 	 */
-	public void setClientes(LinkedList<Cliente> clientes) {
+	public void setClientes(List<Cliente> clientes) {
 		this.clientes = clientes;
 	}
 
 	/**
-	 * una clase que retorna un LinkedList con los jefes que contenga el proyecto
-	 * @return el LinkedList de jefes
+	 * una clase que retorna un List con los jefes que contenga el proyecto
+	 * @return el List de jefes
 	 */
-	public LinkedList<JefeProyecto> getJefes(){
+	public List<JefeProyecto> getJefes(){
 		return this.jefes;
 	}
 	
 	/**
 	 * @param jefes the jefes to set
 	 */
-	public void setJefes(LinkedList<JefeProyecto> jefes) {
+	public void setJefes(List<JefeProyecto> jefes) {
 		this.jefes = jefes;
 	}
 
@@ -147,7 +148,7 @@ public class Proyecto {
 	 * Retorna un formato de String para el correcto visionado por consola de los clientes
 	 * @return una estructura para mostrar los datos de Cliente1
 	 */
-	public String toStringCliente1() {
+	public String toStringCliente() {
 		int size = this.clientes.size();
 		String respuesta =  "====================================================================="+"\n" +
 							"----------------------------DATOS CLIENTE----------------------------"+"\n" +
@@ -163,11 +164,11 @@ public class Proyecto {
 	 * Retorna un formato de String para el correcto visionado por consola de los jefes
 	 * @return una estructura para mostrar los datos de Jefe1
 	 */
-	public String toStringJefe1() {
+	public String toStringJefe() {
 		int size = this.jefes.size();
 		String respuesta =  "====================================================================="+"\n" +
-				"-------------------------DATOS JEFE PROYECTO-------------------------"+"\n" +
-				"====================================================================="+"\n";
+							"-------------------------DATOS JEFE PROYECTO-------------------------"+"\n" +
+							"====================================================================="+"\n";
 		for (int i=0;i<size;i++) {
 			respuesta += "-------------------------JEFE "+(i+1)+"-------------------------"+"\n"
 					+jefes.get(i).toString()+"\n";
@@ -182,6 +183,6 @@ public class Proyecto {
 	 */
 	@Override
 	public String toString() {
-		return this.toStringProyecto()+"\n"+this.toStringCliente1()+"\n"+this.toStringJefe1();
+		return this.toStringProyecto()+"\n"+this.toStringCliente()+"\n"+this.toStringJefe();
 	}
 }
