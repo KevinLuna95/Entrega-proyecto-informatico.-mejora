@@ -5,7 +5,7 @@ package es.ifp.programacion.ejercicio.uf5;
  *
  */
 public class JefeProyecto extends Persona {
-	private int numeroEmpleado;
+	private byte numeroEmpleado;
 	private static String tipoJefe="JP";
 	/**
 	 * Contructor de la clase Jefe proyecto
@@ -14,7 +14,7 @@ public class JefeProyecto extends Persona {
 	 * @param dni l dni del empleado
 	 * @param numeroEmpleado debe comprender un numero entre el 1 y el 100
 	 */
-	public JefeProyecto(String nombre, String apellido, String dni, int numeroEmpleado) {
+	public JefeProyecto(String nombre, String apellido, String dni, byte numeroEmpleado) {
 		super(nombre, apellido, dni);
 		if (numeroEmpleado < 100 && numeroEmpleado > 1)
 			this.numeroEmpleado=numeroEmpleado;
@@ -35,7 +35,7 @@ public class JefeProyecto extends Persona {
 	 * permite modificar el numero de empleado
 	 * @param numeroEmpleado the numeroEmpleado to set
 	 */
-	public void setNumeroEmpleado(int numeroEmpleado) {
+	public void setNumeroEmpleado(byte numeroEmpleado) {
 		this.numeroEmpleado = numeroEmpleado;
 	}
 	
