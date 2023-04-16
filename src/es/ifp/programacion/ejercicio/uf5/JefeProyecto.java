@@ -1,11 +1,14 @@
 package es.ifp.programacion.ejercicio.uf5;
+
+import es.ifp.programacion.ejercicio.uf5.exception.NumeroEmpleadoException;
+
 /**
  * Clase Jefe de proyecto que permite asignar un numero de empleado y tipo de persona JP, es una extensión de la Clase Persona.
  * @author Kevin Luna Botey
  *
  */
 public class JefeProyecto extends Persona {
-	private byte numeroEmpleado;
+	private int numeroEmpleado;
 	private static String tipoJefe="JP";
 	/**
 	 * Contructor de la clase Jefe proyecto
@@ -14,12 +17,12 @@ public class JefeProyecto extends Persona {
 	 * @param dni l dni del empleado
 	 * @param numeroEmpleado debe comprender un numero entre el 1 y el 100
 	 */
-	public JefeProyecto(String nombre, String apellido, String dni, byte numeroEmpleado) {
+	public JefeProyecto(String nombre, String apellido, String dni, int numeroEmpleado) throws NumeroEmpleadoException{
 		super(nombre, apellido, dni);
-		if (numeroEmpleado < 100 && numeroEmpleado > 1)
+		if (numeroEmpleado <= 100 && numeroEmpleado > 1)
 			this.numeroEmpleado=numeroEmpleado;
 		else {
-			System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
+			throw new NumeroEmpleadoException("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
 		}
 	}
 	
@@ -35,8 +38,13 @@ public class JefeProyecto extends Persona {
 	 * permite modificar el numero de empleado
 	 * @param numeroEmpleado the numeroEmpleado to set
 	 */
-	public void setNumeroEmpleado(byte numeroEmpleado) {
-		this.numeroEmpleado = numeroEmpleado;
+	public void setNumeroEmpleado(int numeroEmpleado) throws NumeroEmpleadoException{
+		if (numeroEmpleado <= 100 && numeroEmpleado > 1)
+			this.numeroEmpleado = numeroEmpleado;
+		else {
+			throw new NumeroEmpleadoException("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
+		}
+		
 	}
 	
 	/**
