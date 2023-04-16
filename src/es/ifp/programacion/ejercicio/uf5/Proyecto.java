@@ -2,6 +2,7 @@ package es.ifp.programacion.ejercicio.uf5;
 
 import java.util.Date;
 import java.util.List;
+
 /**
  * Permite crear un proyecto y manejar diferentes clientes y jefes de proyecto.
  * He seleccionado una List ya que no es necesaria una estructura bidimensional. 
@@ -34,6 +35,12 @@ public class Proyecto {
 		this.clientes = clientes;
 		this.jefes = jefes;
 
+	}
+	/**
+	 * Inizializa la clase proyecto sin atributos
+	 */
+	public Proyecto() {
+		
 	}
 	
 	/** 
@@ -136,7 +143,7 @@ public class Proyecto {
 	 */
 	public String toStringProyecto() {
 		return  "====================================================================="+"\n" +
-				"--------------------------DATOS DE PROYECTO--------------------------"+"\n" +
+				"==========================DATOS DE PROYECTO=========================="+"\n" +
 				"====================================================================="+"\n" +
 				"Nombre de proyecto: "+ this.getNombre()+"\n"+
 				"ID Proyecto: "+ this.getIdProyecto()+"\n"+
@@ -150,11 +157,12 @@ public class Proyecto {
 	 */
 	public String toStringCliente() {
 		int size = this.clientes.size();
-		String respuesta =  "====================================================================="+"\n" +
+		String respuesta =  "---------------------------------------------------------------------"+"\n" +
 							"----------------------------DATOS CLIENTE----------------------------"+"\n" +
-							"====================================================================="+"\n";
+							"---------------------------------------------------------------------"+"\n";
 		for (int i=0;i<size;i++) {
-			respuesta += "-----------------------CLIENTE "+(i+1)+"-----------------------"+"\n"
+			respuesta += "                            CLIENTE "+(i+1)+"                            "+"\n" +
+						 "*********************************************************************"+"\n"
 						 +clientes.get(i).toString()+"\n";
 		}
 		return respuesta;
@@ -166,11 +174,12 @@ public class Proyecto {
 	 */
 	public String toStringJefe() {
 		int size = this.jefes.size();
-		String respuesta =  "====================================================================="+"\n" +
+		String respuesta =  "---------------------------------------------------------------------"+"\n" +
 							"-------------------------DATOS JEFE PROYECTO-------------------------"+"\n" +
-							"====================================================================="+"\n";
+							"---------------------------------------------------------------------"+"\n";
 		for (int i=0;i<size;i++) {
-			respuesta += "-------------------------JEFE "+(i+1)+"-------------------------"+"\n"
+			respuesta += "                            JEFE "+(i+1)+"                            "+"\n" +
+						 "*********************************************************************"+"\n"
 					+jefes.get(i).toString()+"\n";
 		}
 		return respuesta;
