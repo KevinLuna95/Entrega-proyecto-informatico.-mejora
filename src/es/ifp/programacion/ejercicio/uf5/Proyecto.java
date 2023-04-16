@@ -116,6 +116,7 @@ public class Proyecto {
 	}
 	
 	/**
+	 * Permite cambiar la lista de clientes
 	 * @param clientes the clientes to set
 	 */
 	public void setClientes(List<Cliente> clientes) {
@@ -131,6 +132,7 @@ public class Proyecto {
 	}
 	
 	/**
+	 * Permite cambiar la lista de jefes
 	 * @param jefes the jefes to set
 	 */
 	public void setJefes(List<JefeProyecto> jefes) {

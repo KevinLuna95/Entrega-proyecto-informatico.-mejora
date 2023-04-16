@@ -9,11 +9,12 @@ import java.util.Scanner;
 import es.ifp.programacion.ejercicio.uf5.exception.NumeroEmpleadoException;
 
 /**
- * Gestion de un proyecto informatico:
- * Se desea implementar una gestión para un proyecto informático. Un proyecto se compone de
- * información de su jefe de proyecto y del cliente del proyecto.
- * 
+ * Programa que permite la gestion de los proyectos de una empresa de desarroyo de software
+ * Mediante la consola se puede crear, visualizar, buscar, modificar y eliminar proyectos.
+ * Los proyectos tienen clientes y jefes de proyecto ademas de la informacion 
+ * sobre el proyecto tales como el nombre, la descripcion y la fecha de creacion.
  * @author Kevin Luna botey
+ * @version 0.0.1
  *
  */
 public class ProgramaPrincipal {
@@ -37,7 +38,7 @@ public class ProgramaPrincipal {
 			jefe = new JefeProyecto("Gorka","Hernandez Tomas", "84523165A", 10);
 			jefes.add(jefe);
 		} catch (NumeroEmpleadoException e) {
-			e.printStackTrace();
+			System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
 		}
 		
 		Proyecto proyecto = new Proyecto("PRO-12","Operacion Caixabank", 
@@ -60,7 +61,7 @@ public class ProgramaPrincipal {
 			jefe = new JefeProyecto("Susana","Oliva Thomas", "84523165A", 2);
 			jefes.add(jefe);
 		} catch (NumeroEmpleadoException e) {
-			e.printStackTrace();
+			System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
 		}
 		
 		proyecto = new Proyecto("PRO-13","Farmacia cruz calleja", 
@@ -108,7 +109,7 @@ public class ProgramaPrincipal {
 					System.out.println(proyecto.toString());
 				break;
 			case '4':
-				modificarProyecto(proyectos);
+				ModificarProyecto(proyectos);
 				break;
 			case '5': 
 				eliminarProyecto(proyectos);
@@ -116,83 +117,59 @@ public class ProgramaPrincipal {
 			case '6': 
 				System.out.println("Fin del programa.");
 				break;
-			default: System.out.println("La opción no es correcta. Prueba con numeros entre el 1 y el 6");
+			default: System.out.println("La opcióon no es correcta. Prueba con numeros entre el 1 y el 6");
 			}
 					
 		}while(opcion != '6');
 	}
 	
 	/**
-	 * Permite modificar un proyecto. este metodo valida la existencia del id del proyecto para permitir su modificacion.
+	 * Mostrara un menu y gestionara la respuesta del usuario para ayudarle a modificar los datos del proyecto 
 	 * @param proyectos Un ArrayListde tipo proyecto donde se almacenan todos los proyectos
 	 */
-	private static void modificarProyecto(List<Proyecto> proyectos) {
+	private static void ModificarProyecto(List<Proyecto> proyectos) {
 		Scanner sc = new Scanner(System.in);
-		String idProyecto = "";
-		Iterator<Proyecto> it = proyectos.iterator();
-		Proyecto proyecto = new Proyecto();
-		Boolean band = false;
-		//TODO probar con buscarProyecto
-		System.out.println("Indica el ID del proyecto a modificar:");
-		idProyecto = sc.nextLine();
-		while(it.hasNext()) {
-			proyecto = it.next();
-			if (proyecto.getIdProyecto().equals(idProyecto)) {
-				band = true;
+		
+		Proyecto proyecto = buscarProyecto(proyectos, "modificar");
+		if (proyecto != null) {
+			char opcion = '0';
+			System.out.println("==========================================================================");
+			do {
+			System.out.println("Bienvenido al menu para la modificacion de un proyecto");
+			System.out.println("Indiaca una opcion a aplicar al proyecto con ID " + proyecto.getIdProyecto() + ":");
+			System.out.println("1. Editar datos del proyecto");
+			System.out.println("2. Crear cliente");
+			System.out.println("3. Eliminar cliente");
+			System.out.println("4. Crear jefe de proyecto");
+			System.out.println("5. Eliminar jefe de proyecto");
+			System.out.println("6. Salir");
+			System.out.println("==========================================================================");
+			opcion = sc.nextLine().charAt(0);
+			
+			switch(opcion) {
+			case '1': 
+				cambiarDatosProyecto(proyecto);
 				break;
+			case '2': 
+				crearClientes(proyecto);
+				break;
+			case '3': 
+				eliminarClientes(proyecto);
+				break;
+			case '4': 
+				crearJefes(proyecto);
+				break;
+			case '5': 
+				eliminarJefes(proyecto);
+				break;
+			case '6':
+				System.out.println("Saliendo del menu");
+				break;
+			default:System.out.println("Opcion incorrecta. Prueba con un numero del 1 al 6");
 			}
+			
+			}while(opcion != '6');
 		}
-		if(band == true) {
-			menuModificarProyecto(proyecto);
-			band = false;
-		}
-		else
-			System.out.println("El ID del proyecto no ha sido encontrado.");
-	}
-	
-	/**
-	 * Mostrara un menu y gestionara la respuesta del usuario para ayudarle a modificar los datos del proyecto 
-	 * @param proyecto Un ArrayListde tipo proyecto donde se almacenan todos los proyectos
-	 */
-	private static void menuModificarProyecto(Proyecto proyecto) {
-		Scanner sc = new Scanner(System.in);
-		char opcion = '0';
-		System.out.println("==========================================================================");
-		do {
-		System.out.println("Bienvenido al menu para la modificacion de un proyecto");
-		System.out.println("Indiaca una opcion a aplicar al proyecto con ID" + proyecto.getIdProyecto() + ":");
-		System.out.println("1. Editar datos del proyecto");
-		System.out.println("2. Crear cliente");
-		System.out.println("3. Eliminar cliente");
-		System.out.println("4. Crear jefe de proyecto");
-		System.out.println("5. Eliminar jefe de proyecto");
-		System.out.println("6. Salir");
-		System.out.println("==========================================================================");
-		opcion = sc.nextLine().charAt(0);
-		
-		switch(opcion) {
-		case '1': 
-			cambiarDatosProyecto(proyecto);
-			break;
-		case '2': 
-			crearClientes(proyecto);
-			break;
-		case '3': 
-			eliminarClientes(proyecto);
-			break;
-		case '4': 
-			crearJefes(proyecto);
-			break;
-		case '5': 
-			eliminarJefes(proyecto);
-			break;
-		case '6':
-			System.out.println("Saliendo del menu");
-			break;
-		default:System.out.println("Opcion incorrecta. Prueba con un numero del 1 al 6");
-		}
-		
-		}while(opcion != '6');
 	}
 	
 	/**
@@ -272,7 +249,7 @@ public class ProgramaPrincipal {
 					jefe = new JefeProyecto(nombre, apellidos, dni, numeroEmpleado);
 					jefes.add(jefe);
 				} catch (NumeroEmpleadoException e) {
-					e.printStackTrace();
+					System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
 				}
 				
 				do {
@@ -395,7 +372,11 @@ public class ProgramaPrincipal {
 		}
 		return proyecto;
 	}
-
+	
+	/**
+	 * Permite visualizar los proyectos existentes y su informacion dentro del programa
+	 * @param proyectos Un ArrayListde tipo proyecto donde se almacenan todos los proyectos
+	 */
 	public static void verProyectos(List<Proyecto> proyectos) {
 		int size = proyectos.size();
 		for (int i = 0;i<size;i++) {
@@ -493,7 +474,7 @@ public class ProgramaPrincipal {
 					jefe = new JefeProyecto(nombre, apellidos, dni, numeroEmpleado);
 					jefes.add(jefe);
 				} catch (NumeroEmpleadoException e) {
-					e.printStackTrace();
+					System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
 				}
 				
 				do {
@@ -510,6 +491,5 @@ public class ProgramaPrincipal {
 				} while (!siONo.toUpperCase().equals("N"));
 
 		return jefes;
-		
 	}
 }

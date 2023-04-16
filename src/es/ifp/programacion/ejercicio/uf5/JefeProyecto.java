@@ -10,16 +10,18 @@ import es.ifp.programacion.ejercicio.uf5.exception.NumeroEmpleadoException;
 public class JefeProyecto extends Persona {
 	private int numeroEmpleado;
 	private static String tipoJefe="JP";
+
 	/**
 	 * Contructor de la clase Jefe proyecto
 	 * @param nombre debes aportar el Nombre del cliente
 	 * @param apellido los 2 apellidos del Jefe (Si existen)
 	 * @param dni l dni del empleado
 	 * @param numeroEmpleado debe comprender un numero entre el 1 y el 100
+	 * @throws NumeroEmpleadoException Controla que el numero de empleado contenga un numero entre el 1 y el 100
 	 */
 	public JefeProyecto(String nombre, String apellido, String dni, int numeroEmpleado) throws NumeroEmpleadoException{
 		super(nombre, apellido, dni);
-		if (numeroEmpleado <= 100 && numeroEmpleado > 1)
+		if (numeroEmpleado <= 100 && numeroEmpleado >= 1)
 			this.numeroEmpleado=numeroEmpleado;
 		else {
 			throw new NumeroEmpleadoException("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
@@ -34,10 +36,11 @@ public class JefeProyecto extends Persona {
 		return numeroEmpleado;
 	}
 	
-	/**
-	 * permite modificar el numero de empleado
-	 * @param numeroEmpleado the numeroEmpleado to set
-	 */
+/**
+ * permite modificar el numero de empleado
+ * @param numeroEmpleado the numeroEmpleado to set
+ * @throws NumeroEmpleadoException Controla que el numero de empleado contenga un numero entre el 1 y el 100
+ */
 	public void setNumeroEmpleado(int numeroEmpleado) throws NumeroEmpleadoException{
 		if (numeroEmpleado <= 100 && numeroEmpleado > 1)
 			this.numeroEmpleado = numeroEmpleado;
