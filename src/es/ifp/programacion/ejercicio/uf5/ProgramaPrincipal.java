@@ -54,12 +54,13 @@ public class ProgramaPrincipal {
 		clientes.add(cliente);
 		cliente = new Cliente("Lorna","Montes Fernandez", "74521365D");
 		clientes.add(cliente);
-		
+		// TODO REVISAR POR QUE PSCAR TIENE ERROR EN CLIENTE
 		try {
 			JefeProyecto jefe = new JefeProyecto("Oscar","Salas Gutierrez", "89513264U", 1);
 			jefes.add(jefe);
 			jefe = new JefeProyecto("Susana","Oliva Thomas", "84523165A", 2);
 			jefes.add(jefe);
+			
 		} catch (NumeroEmpleadoException e) {
 			System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
 		}
@@ -132,11 +133,12 @@ public class ProgramaPrincipal {
 		
 		Proyecto proyecto = buscarProyecto(proyectos, "modificar");
 		if (proyecto != null) {
+			String idProyecto = proyecto.getIdProyecto();
 			char opcion = '0';
 			System.out.println("==========================================================================");
 			do {
 			System.out.println("Bienvenido al menu para la modificacion de un proyecto");
-			System.out.println("Indiaca una opcion a aplicar al proyecto con ID " + proyecto.getIdProyecto() + ":");
+			System.out.println("Indiaca una opcion a aplicar al proyecto con ID " + idProyecto + ":");
 			System.out.println("1. Editar datos del proyecto");
 			System.out.println("2. Crear cliente");
 			System.out.println("3. Eliminar cliente");
@@ -331,16 +333,20 @@ public class ProgramaPrincipal {
 	private static void eliminarProyecto(List<Proyecto> proyectos) {
 		Scanner sc = new Scanner(System.in);
 		Proyecto proyecto = buscarProyecto(proyectos, "eliminar");
+		
 		if (proyecto == null) {
-		}else if(proyectos.remove(proyecto)) {
-			System.out.println("Confirma que deseas eliminar el proyecto con ID " + proyecto.getIdProyecto() + " S/N");
-			if(sc.nextLine().toUpperCase().equals("S"))
-				System.out.println("El proyecto con ID " + proyecto.getIdProyecto() + " ha sido eliminado correctamente");
+		}else {
+			//Instancio el id del proyecto dentro del else para evitar que si el id no corresponde con un proyecto se tenga que instanciar la variable.
+			String idProyecto = proyecto.getIdProyecto();
+			System.out.println("Confirma que deseas eliminar el proyecto con ID " + idProyecto + " S/N");
+			if(sc.nextLine().toUpperCase().equals("S")) {
+				proyectos.remove(proyecto);
+				System.out.println("El proyecto con ID " + idProyecto + " ha sido eliminado correctamente");
+			}
 			else
-				System.out.println("El proyecto con ID " + proyecto.getIdProyecto() + " no ha sido eliminado");
+				System.out.println("El proyecto con ID " + idProyecto + " no ha sido eliminado");
 		}
-			else
-				System.out.println("El proyecto con ID " + proyecto.getIdProyecto() + " no ha sido eliminado");
+
 	}
 
 	/**
