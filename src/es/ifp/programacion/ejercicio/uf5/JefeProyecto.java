@@ -21,11 +21,11 @@ public class JefeProyecto extends Persona {
 	 */
 	public JefeProyecto(String nombre, String apellido, String dni, int numeroEmpleado) throws NumeroEmpleadoException{
 		super(nombre, apellido, dni);
-		if (numeroEmpleado <= 100 && numeroEmpleado >= 1)
+		if (numeroEmpleado > 0 && numeroEmpleado < 101)
 			this.numeroEmpleado=numeroEmpleado;
-		else {
+		else 
 			throw new NumeroEmpleadoException("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
-		}
+		
 	}
 	
 	/**
@@ -73,14 +73,9 @@ public class JefeProyecto extends Persona {
 	 */
 	@Override
 	public String toString() {
-		if (this.getNumeroEmpleado() < 100 && this.getNumeroEmpleado() > 1)
-			return  super.toString() + "\n" +
+				return  super.toString() + "\n" +
 					"Tipo= "+ this.getTipo() + "\n" + 
 					"Numero de empleado= " + this.getNumeroEmpleado();
-		else
-			return  super.toString() + "\n" +
-			"Tipo= "+ this.getTipo() + "\n" + 
-			"Numero de empleado= Erroneo, prueba con un numero del 1 al 100";
 	}
 	
 }
