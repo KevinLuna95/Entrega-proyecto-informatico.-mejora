@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-
 import es.ifp.programacion.ejercicio.uf5.exception.NumeroEmpleadoException;
 
 /**
@@ -54,7 +53,6 @@ public class ProgramaPrincipal {
 		clientes.add(cliente);
 		cliente = new Cliente("Lorna","Montes Fernandez", "74521365D");
 		clientes.add(cliente);
-		// TODO REVISAR POR QUE PSCAR TIENE ERROR EN CLIENTE
 		try {
 			JefeProyecto jefe = new JefeProyecto("Oscar","Salas Gutierrez", "89513264U", 1);
 			jefes.add(jefe);
@@ -187,14 +185,17 @@ public class ProgramaPrincipal {
 		
 		System.out.println("Indica el DNI del cliente que deseas eliminar");
 		dni = sc.nextLine();
+		Boolean band = false;
 		while(it.hasNext()) {
 			cliente = it.next();
 			if(cliente.getDni().equals(dni)) {
 				it.remove();
 				System.out.println("Cliente eliminado");
-			}else
-				System.out.println("El DNI del cliente no ha sido encontrado");
+				band = true;
+			}
 		}
+		if(!band)
+			System.out.println("El DNI del cliente no ha sido encontrado");
 	}
 	
 	/**
@@ -210,14 +211,17 @@ public class ProgramaPrincipal {
 		
 		System.out.println("Indica el DNI del jefe que deseas eliminar");
 		dni = sc.nextLine();
+		Boolean band = false;
 		while(it.hasNext()) {
 			jefe = it.next();
 			if(jefe.getDni().equals(dni)) {
 				it.remove();
-				System.out.println("Cliente eliminado");
-			}else
-				System.out.println("El DNI del cliente no ha sido encontrado");
+				System.out.println("Jefe eliminado");
+				band = true;
+			} 
 		}
+		if(!band)
+			System.out.println("El DNI del cliente no ha sido encontrado");
 	}
 
 	/**
@@ -229,6 +233,7 @@ public class ProgramaPrincipal {
 		String nombre ="";
 		String apellidos ="";
 		String dni ="";
+		String numeroEmpleadoString = "";
 		int numeroEmpleado = 0;
 		List<JefeProyecto> jefes = proyecto.getJefes();
 		String siONo = "";
@@ -243,30 +248,52 @@ public class ProgramaPrincipal {
 		
 			System.out.println("Indica el numero de empleado del jefe de proyecto (ente 1 y 100):");
 			//Falta una comprobacion para evitar que le salte al usuario una excepcion si introduce texto.
-			
-			numeroEmpleado = Integer.parseInt(sc.nextLine());
+			numeroEmpleadoString = sc.nextLine();
+			try {
+				if (isInteger(numeroEmpleadoString)) {
+					numeroEmpleado = Integer.parseInt(numeroEmpleadoString);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 				JefeProyecto jefe;
 				try {
 					jefe = new JefeProyecto(nombre, apellidos, dni, numeroEmpleado);
 					jefes.add(jefe);
+					do {
+						System.out.println("Jefe creado correctamente, deseas crear otro jefe mas? S/N");
+						siONo = sc.nextLine();
+						if (siONo.toUpperCase().equals("S")) {
+							crearJefe();
+							siONo = "N";
+						}
+						else if(!siONo.toUpperCase().equals("N")) {
+							System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
+							siONo = sc.nextLine();
+							if(siONo.toUpperCase().equals("S")) {
+								crearJefe();
+								siONo = "N";
+							} else {
+								System.out.println("Saliendo del menu para crear jefes");
+								siONo = "N";
+							}
+						}
+					} while (!siONo.toUpperCase().equals("N"));
 				} catch (NumeroEmpleadoException e) {
 					System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
 				}
 				
-				do {
-					System.out.println("Cliente creado correctamente, deseas crear otro cliente mas? S/N");
-					siONo = sc.nextLine();
-					if (siONo.toUpperCase().equals("S")) {
-						crearJefe();
-						siONo = "N";
-					}
-					else if(!siONo.toUpperCase().equals("N")) {
-						System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
-						siONo = sc.nextLine();
-					}
-				} while (!siONo.toUpperCase().equals("N"));
 				
+	}
+	
+	public static boolean isInteger(String string) {
+	    try {
+	        Integer.valueOf(string);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
 	}
 	
 	/**
@@ -301,6 +328,13 @@ public class ProgramaPrincipal {
 			else if(!siONo.toUpperCase().equals("N")) {
 				System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
 				siONo = sc.nextLine();
+				if(siONo.toUpperCase().equals("S")) {
+					crearCliente();
+					siONo = "N";
+				} else {
+					System.out.println("Saliendo del menu para crear clientes");
+					siONo = "N";
+				}
 			}
 		} while (!siONo.toUpperCase().equals("N"));
 		
@@ -361,22 +395,25 @@ public class ProgramaPrincipal {
 		Proyecto proyecto;
 		Iterator<Proyecto> it = proyectos.iterator();
 		Boolean band = false;
-		
-		System.out.println("Indica el ID del proyecto que deseas " + accion + ":");
-		idProyecto = sc.nextLine();
-		
-		do {
-			proyecto = it.next();
-			if (proyecto.getIdProyecto().equals(idProyecto)) {
-				System.out.println(proyecto);
-				band = true;
+		if (proyectos.size() != 0) {
+			System.out.println("Indica el ID del proyecto que deseas " + accion + ":");
+			idProyecto = sc.nextLine();
+			do {
+				proyecto = it.next();
+				if (proyecto.getIdProyecto().equals(idProyecto)) {
+					System.out.println(proyecto);
+					band = true;
+				}
+			} while (band == false && it.hasNext() == true);
+			if (band == false) {
+				System.out.println("El ID " + idProyecto + " no es correcto o no existe ningun proyecto con el ID " + idProyecto);
+				return proyecto = null;
 			}
-		} while (band == false && it.hasNext() == true);
-		if (band == false) {
-			System.out.println("El ID " + idProyecto + " no es correcto o no existe ningun proyecto con el ID " + idProyecto);
+			return proyecto;
+		} else {
+			System.out.println("No hay ningun proyecto. Crea uno y vuelve a intentarlo");
 			return proyecto = null;
 		}
-		return proyecto;
 	}
 	
 	/**
@@ -385,8 +422,12 @@ public class ProgramaPrincipal {
 	 */
 	public static void verProyectos(List<Proyecto> proyectos) {
 		int size = proyectos.size();
-		for (int i = 0;i<size;i++) {
-			System.out.println(proyectos.get(i).toString());
+		if (size == 0) {
+			System.out.println("Actualmente no existen proyectos a mostrar. Crea uno con la opcion de menu 1.Crear un proyecto");
+		} else {
+			for (int i = 0;i<size;i++) {
+				System.out.println(proyectos.get(i).toString());
+			}
 		}
 	}
 	/**
@@ -444,6 +485,13 @@ public class ProgramaPrincipal {
 			else if(!siONo.toUpperCase().equals("N")) {
 				System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
 				siONo = sc.nextLine();
+				if(siONo.toUpperCase().equals("S")) {
+					crearCliente();
+					siONo = "N";
+				} else {
+					System.out.println("Saliendo del menu para crear clientes");
+					siONo = "N";
+				}
 			}
 		} while (!siONo.toUpperCase().equals("N"));
 		
@@ -459,6 +507,7 @@ public class ProgramaPrincipal {
 		String nombre ="";
 		String apellidos ="";
 		String dni ="";
+		String numeroEmpleadoString = "";
 		int numeroEmpleado = 0;
 		List<JefeProyecto> jefes = new ArrayList<JefeProyecto>();
 		String siONo = "";
@@ -472,8 +521,14 @@ public class ProgramaPrincipal {
 		dni = sc.nextLine();
 		
 			System.out.println("Indica el numero de empleado del jefe de proyecto (ente 1 y 100):");
-			
-			numeroEmpleado = Integer.parseInt(sc.nextLine());
+			numeroEmpleadoString = sc.nextLine();
+			try {
+				if (isInteger(numeroEmpleadoString)) {
+					numeroEmpleado = Integer.parseInt(numeroEmpleadoString);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 				JefeProyecto jefe;
 				try {
@@ -493,6 +548,13 @@ public class ProgramaPrincipal {
 					else if(!siONo.toUpperCase().equals("N")) {
 						System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
 						siONo = sc.nextLine();
+						if(siONo.toUpperCase().equals("S")) {
+							crearJefe();
+							siONo = "N";
+						} else {
+							System.out.println("Saliendo del menu para crear jefes");
+							siONo = "N";
+						}
 					}
 				} while (!siONo.toUpperCase().equals("N"));
 
