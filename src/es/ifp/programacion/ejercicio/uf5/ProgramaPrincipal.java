@@ -12,7 +12,7 @@ import es.ifp.programacion.ejercicio.uf5.exception.NumeroEmpleadoException;
  * Mediante la consola se puede crear, visualizar, buscar, modificar y eliminar proyectos.
  * Los proyectos tienen clientes y jefes de proyecto ademas de la informacion 
  * sobre el proyecto tales como el nombre, la descripcion y la fecha de creacion.
- * @author Kevin Luna botey
+ * @author Kevin Luna Botey
  * @version 0.0.1
  *
  */
@@ -103,9 +103,7 @@ public class ProgramaPrincipal {
 				verProyectos(proyectos);
 				break;
 			case '3': 
-				proyecto = buscarProyecto(proyectos,"buscar");
-				if(proyecto != null)
-					System.out.println(proyecto.toString());
+				buscarProyecto(proyectos,"buscar");
 				break;
 			case '4':
 				ModificarProyecto(proyectos);
@@ -182,10 +180,10 @@ public class ProgramaPrincipal {
 		List<Cliente> clientes = proyecto.getClientes();
 		Iterator<Cliente> it = clientes.iterator();
 		Cliente cliente;
+		Boolean band = false;
 		
 		System.out.println("Indica el DNI del cliente que deseas eliminar");
 		dni = sc.nextLine();
-		Boolean band = false;
 		while(it.hasNext()) {
 			cliente = it.next();
 			if(cliente.getDni().equals(dni)) {
@@ -208,17 +206,17 @@ public class ProgramaPrincipal {
 		List<JefeProyecto> jefes = proyecto.getJefes();
 		Iterator<JefeProyecto> it = jefes.iterator();
 		JefeProyecto jefe;
+		Boolean band = false;
 		
 		System.out.println("Indica el DNI del jefe que deseas eliminar");
 		dni = sc.nextLine();
-		Boolean band = false;
 		while(it.hasNext()) {
 			jefe = it.next();
 			if(jefe.getDni().equals(dni)) {
 				it.remove();
 				System.out.println("Jefe eliminado");
 				band = true;
-			} 
+			}
 		}
 		if(!band)
 			System.out.println("El DNI del cliente no ha sido encontrado");
@@ -229,6 +227,7 @@ public class ProgramaPrincipal {
 	 * @param proyecto Un ArrayListde tipo proyecto donde se almacenan todos los proyectos
 	 */
 	private static void crearJefes(Proyecto proyecto) {
+		//TODO
 		Scanner sc= new Scanner(System.in);
 		String nombre ="";
 		String apellidos ="";
@@ -245,9 +244,9 @@ public class ProgramaPrincipal {
 		apellidos = sc.nextLine();
 		System.out.println("Indica el DNI del jefe de proyecto:");
 		dni = sc.nextLine();
-		
+		siONo = comprobarDniJefe(dni,jefes);
+		if(!siONo.equals("N")) {
 			System.out.println("Indica el numero de empleado del jefe de proyecto (ente 1 y 100):");
-			//Falta una comprobacion para evitar que le salte al usuario una excepcion si introduce texto.
 			numeroEmpleadoString = sc.nextLine();
 			try {
 				if (isInteger(numeroEmpleadoString)) {
@@ -256,35 +255,35 @@ public class ProgramaPrincipal {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-				JefeProyecto jefe;
-				try {
-					jefe = new JefeProyecto(nombre, apellidos, dni, numeroEmpleado);
-					jefes.add(jefe);
-					do {
-						System.out.println("Jefe creado correctamente, deseas crear otro jefe mas? S/N");
-						siONo = sc.nextLine();
-						if (siONo.toUpperCase().equals("S")) {
-							crearJefe();
-							siONo = "N";
-						}
-						else if(!siONo.toUpperCase().equals("N")) {
-							System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
-							siONo = sc.nextLine();
-							if(siONo.toUpperCase().equals("S")) {
-								crearJefe();
-								siONo = "N";
-							} else {
-								System.out.println("Saliendo del menu para crear jefes");
-								siONo = "N";
-							}
-						}
-					} while (!siONo.toUpperCase().equals("N"));
-				} catch (NumeroEmpleadoException e) {
-					System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
-				}
-				
-				
+		
+			JefeProyecto jefe;
+			try {
+				jefe = new JefeProyecto(nombre, apellidos, dni, numeroEmpleado);
+				jefes.add(jefe);
+			} catch (NumeroEmpleadoException e) {
+				System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
+				siONo = "N";
+			}
+		}
+		while (!siONo.toUpperCase().equals("N")){
+			System.out.println("Jefe creado correctamente, deseas crear otro jefe mas? S/N");
+			siONo = sc.nextLine();
+			if (siONo.toUpperCase().equals("S")) {
+				crearJefe(jefes);
+				siONo = "N";
+			}else if(!siONo.toUpperCase().equals("N")) {
+				System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
+				siONo = sc.nextLine();
+				if(siONo.toUpperCase().equals("S")) {
+						crearJefe(jefes);
+						siONo = "N";
+				}else
+					siONo = "N";
+			} else {
+				System.out.println("Saliendo del menu para crear Jefes");
+				siONo = "N";
+			}
+		}
 	}
 	
 	public static boolean isInteger(String string) {
@@ -315,29 +314,115 @@ public class ProgramaPrincipal {
 		apellidos = sc.nextLine();
 		System.out.println("Indica el DNI del cliente:");
 		dni = sc.nextLine();
-		
-		Cliente cliente = new Cliente(nombre, apellidos, dni);
-		clientes.add(cliente);
-		do {
+		siONo = comprobarDniCliente(dni,clientes);
+		if(!siONo.equals("N")) {
+			Cliente cliente = new Cliente(nombre, apellidos, dni);
+			clientes.add(cliente);
+		}
+		while (!siONo.toUpperCase().equals("N")){
 			System.out.println("Cliente creado correctamente, deseas crear otro cliente mas? S/N");
 			siONo = sc.nextLine();
 			if (siONo.toUpperCase().equals("S")) {
-				crearCliente();
-				siONo = "N";
+				crearClientes(clientes);
+					siONo = "N";
 			}
 			else if(!siONo.toUpperCase().equals("N")) {
 				System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
 				siONo = sc.nextLine();
 				if(siONo.toUpperCase().equals("S")) {
-					crearCliente();
+					crearClientes(clientes);
 					siONo = "N";
-				} else {
-					System.out.println("Saliendo del menu para crear clientes");
+					} else
 					siONo = "N";
-				}
+			} else {
+				System.out.println("Saliendo del menu para crear Clientes");
+				siONo = "N";
 			}
-		} while (!siONo.toUpperCase().equals("N"));
+		}
+	}
+
+	/**
+	 * Comprueba la existencia de el DNI en una lista de clientes
+	 * @param dni Dni que buscar
+	 * @param clientes lista donde buscar el DNI
+	 * @return S o N en función de su existencia
+	 */
+	private static String comprobarDniCliente(String dni, List<Cliente> clientes) {
+		Iterator<Cliente> it = clientes.iterator();
+		Cliente cliente;
 		
+		while(it.hasNext()) {
+			cliente = it.next();
+			if(cliente.getDni().equals(dni)) {
+				System.out.println("El DNI ya existe. Prueba a eliminarlo para poder crearlo");
+				return "N";
+			}
+		}
+		return "S";
+	}
+	
+	/**
+	 * Comprueba la existencia de el DNI en una lista de jefes
+	 * @param dni Dni que buscar
+	 * @param jefes lista donde buscar el DNI
+	 * @return S o N en función de su existencia
+	 */
+	private static String comprobarDniJefe(String dni, List<JefeProyecto> jefes) {
+		Iterator<JefeProyecto> it = jefes.iterator();
+		JefeProyecto jefe;
+		
+		while(it.hasNext()) {
+			jefe = it.next();
+			if(jefe.getDni().equals(dni)) {
+				System.out.println("El DNI ya existe. Prueba a eliminarlo para poder crearlo");
+				return "N";
+			}
+		}
+		return "S";
+	}
+
+	/**
+	 * Esta función permite crear un bucle para crear clientes en un mismo List
+	 * @param clientes List en el que se crearán los clientes
+	 */
+	private static void crearClientes(List<Cliente> clientes) {
+		Scanner sc = new Scanner(System.in);
+		String nombre ="";
+		String apellidos ="";
+		String dni ="";
+		String siONo = "";
+		
+		System.out.println("Sistema de creacion de clientes");
+		System.out.println("Indica el nombre del cliente:");
+		nombre = sc.nextLine();
+		System.out.println("Indica los apellidos del cliente:");
+		apellidos = sc.nextLine();
+		System.out.println("Indica el DNI del cliente:");
+		dni = sc.nextLine();
+		siONo = comprobarDniCliente(dni,clientes);
+		if(!siONo.equals("N")) {
+			Cliente cliente = new Cliente(nombre, apellidos, dni);
+			clientes.add(cliente);
+		}
+		while (!siONo.toUpperCase().equals("N")){
+			System.out.println("Cliente creado correctamente, deseas crear otro cliente mas? S/N");
+			siONo = sc.nextLine();
+			if (siONo.toUpperCase().equals("S")) {
+				crearClientes(clientes);
+					siONo = "N";
+			}else if(!siONo.toUpperCase().equals("N")) {
+				System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
+				siONo = sc.nextLine();
+				if(siONo.toUpperCase().equals("S")) {
+					crearClientes(clientes);
+					siONo = "N";
+				} else
+					siONo = "N";
+			} else {
+				System.out.println("Saliendo del menu para crear Clientes");
+				siONo = "N";
+			}
+		}
 	}
 
 	/**
@@ -356,8 +441,7 @@ public class ProgramaPrincipal {
 		if(sc.nextLine().toUpperCase().equals("S")) {
 			System.out.println("Indica la nueva descripcion del proyecto");
 			proyecto.setDescripcion(sc.nextLine());
-			}
-		
+		}
 	}
 
 	/**
@@ -422,9 +506,9 @@ public class ProgramaPrincipal {
 	 */
 	public static void verProyectos(List<Proyecto> proyectos) {
 		int size = proyectos.size();
-		if (size == 0) {
+		if (size == 0) 
 			System.out.println("Actualmente no existen proyectos a mostrar. Crea uno con la opcion de menu 1.Crear un proyecto");
-		} else {
+		else {
 			for (int i = 0;i<size;i++) {
 				System.out.println(proyectos.get(i).toString());
 			}
@@ -451,6 +535,7 @@ public class ProgramaPrincipal {
 		Proyecto proyecto = new Proyecto(idProyecto, nombreProyecto, descripcionProyecto, new Date(), crearCliente(), crearJefe());
 		proyectos.add(proyecto);
 		
+		
 	}
 	
 	/**
@@ -472,29 +557,30 @@ public class ProgramaPrincipal {
 		apellidos = sc.nextLine();
 		System.out.println("Indica el DNI del cliente:");
 		dni = sc.nextLine();
-		
-		Cliente cliente = new Cliente(nombre, apellidos, dni);
-		clientes.add(cliente);
-		do {
+		siONo = comprobarDniCliente(dni,clientes);
+		if(!siONo.equals("N")) {
+			Cliente cliente = new Cliente(nombre, apellidos, dni);
+			clientes.add(cliente);
+		}
+		while (!siONo.toUpperCase().equals("N")){
 			System.out.println("Cliente creado correctamente, deseas crear otro cliente mas? S/N");
 			siONo = sc.nextLine();
 			if (siONo.toUpperCase().equals("S")) {
-				crearCliente();
+				crearClientes(clientes);
 				siONo = "N";
-			}
-			else if(!siONo.toUpperCase().equals("N")) {
+			}else if(!siONo.toUpperCase().equals("N")) {
 				System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
 				siONo = sc.nextLine();
 				if(siONo.toUpperCase().equals("S")) {
-					crearCliente();
+					crearClientes(clientes);
+						siONo = "N";
+				} else
 					siONo = "N";
-				} else {
-					System.out.println("Saliendo del menu para crear clientes");
-					siONo = "N";
-				}
+			} else {
+				System.out.println("Saliendo del menu para crear Clientes");
+				siONo = "N";
 			}
-		} while (!siONo.toUpperCase().equals("N"));
-		
+		}
 		return clientes;
 	}
 	
@@ -519,7 +605,71 @@ public class ProgramaPrincipal {
 		apellidos = sc.nextLine();
 		System.out.println("Indica el DNI del jefe de proyecto:");
 		dni = sc.nextLine();
-		
+		siONo = comprobarDniJefe(dni,jefes);
+		if(!siONo.equals("N")) {
+			System.out.println("Indica el numero de empleado del jefe de proyecto (ente 1 y 100):");
+			numeroEmpleadoString = sc.nextLine();
+			try {
+				if (isInteger(numeroEmpleadoString)) 
+					numeroEmpleado = Integer.parseInt(numeroEmpleadoString);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	
+			JefeProyecto jefe;
+			try {
+				jefe = new JefeProyecto(nombre, apellidos, dni, numeroEmpleado);
+				jefes.add(jefe);
+			} catch (NumeroEmpleadoException e) {
+				System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
+				siONo = "N";
+			}
+		}
+		while (!siONo.toUpperCase().equals("N")){
+			System.out.println("Jefe creado correctamente, deseas crear otro jefe mas? S/N");
+			siONo = sc.nextLine();
+			if (siONo.toUpperCase().equals("S")) {
+					crearJefe(jefes);
+					siONo = "N";
+			}else if(!siONo.toUpperCase().equals("N")) {
+				System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
+				siONo = sc.nextLine();
+				if(siONo.toUpperCase().equals("S")) {
+						crearJefe(jefes);
+						siONo = "N";
+				}else
+					siONo = "N";
+			} else {
+				System.out.println("Saliendo del menu para crear Jefes");
+				siONo = "N";
+			}
+		}
+				
+		return jefes;
+	}
+	
+	/**
+	 * Esta función permite crear un bucle para crear jefes en un mismo List
+	 * @param jefes List en el que se crearán los jefes
+	 */
+	private static void crearJefe(List<JefeProyecto> jefes) {
+		Scanner sc= new Scanner(System.in);
+		String nombre ="";
+		String apellidos ="";
+		String dni ="";
+		String numeroEmpleadoString = "";
+		int numeroEmpleado = 0;
+		String siONo = "";
+
+		System.out.println("Sistema de creacion de jefes de proyecto");
+		System.out.println("Indica el nombre del jefe de proyecto:");
+		nombre = sc.nextLine();
+		System.out.println("Indica los apellidos del jefe de proyecto:");
+		apellidos = sc.nextLine();
+		System.out.println("Indica el DNI del jefe de proyecto:");
+		dni = sc.nextLine();
+		siONo = comprobarDniJefe(dni,jefes);
+		if(!siONo.equals("N")) {
 			System.out.println("Indica el numero de empleado del jefe de proyecto (ente 1 y 100):");
 			numeroEmpleadoString = sc.nextLine();
 			try {
@@ -529,35 +679,34 @@ public class ProgramaPrincipal {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-				JefeProyecto jefe;
-				try {
-					jefe = new JefeProyecto(nombre, apellidos, dni, numeroEmpleado);
-					jefes.add(jefe);
-				} catch (NumeroEmpleadoException e) {
-					System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
-				}
-				
-				do {
-					System.out.println("Cliente creado correctamente, deseas crear otro cliente mas? S/N");
-					siONo = sc.nextLine();
-					if (siONo.toUpperCase().equals("S")) {
-						crearJefe();
+	
+			JefeProyecto jefe;
+			try {
+				jefe = new JefeProyecto(nombre, apellidos, dni, numeroEmpleado);
+				jefes.add(jefe);
+			} catch (NumeroEmpleadoException e) {
+				System.out.println("El numero de empleado no se ha guardado porque debe comprender un numero entre 1 y 100");
+				siONo = "N";
+			}
+		}
+		while (!siONo.toUpperCase().equals("N")){
+			System.out.println("Jefe creado correctamente, deseas crear otro jefe mas? S/N");
+			siONo = sc.nextLine();
+			if (siONo.toUpperCase().equals("S")) {
+					crearJefe(jefes);
+					siONo = "N";
+			}else if(!siONo.toUpperCase().equals("N")) {
+				System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
+				siONo = sc.nextLine();
+				if(siONo.toUpperCase().equals("S")) {
+						crearJefe(jefes);
 						siONo = "N";
 					}
-					else if(!siONo.toUpperCase().equals("N")) {
-						System.out.println("Respuesta incorrecta, selecciona S para si, N para no");
-						siONo = sc.nextLine();
-						if(siONo.toUpperCase().equals("S")) {
-							crearJefe();
-							siONo = "N";
-						} else {
-							System.out.println("Saliendo del menu para crear jefes");
-							siONo = "N";
-						}
-					}
-				} while (!siONo.toUpperCase().equals("N"));
-
-		return jefes;
+					siONo = "N";
+				} else {
+					System.out.println("Saliendo del menu para crear Jefes");
+					siONo = "N";
+			}
+		}	
 	}
 }
